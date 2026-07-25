@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/anti-shilling",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
