@@ -19,7 +19,7 @@ export default function VerifyPhoneForm() {
     setError(null);
     const supabase = createClient();
     const { error } = await supabase.auth.updateUser({ phone });
-    if (error) setError(error.message);
+    if (error) setError(error.message || "No se pudo enviar el código. Verificá que el proveedor de SMS esté configurado en Supabase.");
     else setStep("otp");
     setLoading(false);
   }

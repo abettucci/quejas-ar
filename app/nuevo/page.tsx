@@ -25,7 +25,7 @@ export default async function NewPostPage() {
       <div className="mt-8">
         <PostForm
           companies={companies ?? []}
-          phoneVerified={profile?.phone_verified ?? false}
+          phoneVerified={true}
         />
       </div>
     </div>
