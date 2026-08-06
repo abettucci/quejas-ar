@@ -13,8 +13,10 @@ import { POST_TYPES, INDUSTRIES, type PostType } from "@/lib/constants";
 
 type CompanyOpt = { id: string; name: string; slug: string; industry: string };
 
+const NEW_COMPANY_SENTINEL = "__new__";
+
 export default function PostForm({
-  companies,
+  companies: initialCompanies,
   phoneVerified,
 }: {
   companies: CompanyOpt[];
@@ -22,6 +24,7 @@ export default function PostForm({
 }) {
   const router = useRouter();
   const [type, setType] = useState<PostType>("complaint");
+  const [companies, setCompanies] = useState<CompanyOpt[]>(initialCompanies);
   const [companyId, setCompanyId] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -29,6 +32,53 @@ export default function PostForm({
   const [evidenceUrls, setEvidenceUrls] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Nueva empresa
+  const [addingCompany, setAddingCompany] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newIndustry, setNewIndustry] = useState("ecommerce");
+  const [newWebsite, setNewWebsite] = useState("");
+  const [newInstagram, setNewInstagram] = useState("");
+  const [savingCompany, setSavingCompany] = useState(false);
+  const [companyError, setCompanyError] = useState<string | null>(null);
+
+  function handleCompanySelect(val: string) {
+    if (val === NEW_COMPANY_SENTINEL) {
+      setAddingCompany(true);
+      setCompanyId("");
+    } else {
+      setAddingCompany(false);
+      setCompanyId(val);
+    }
+  }
+
+  async function handleAddCompany() {
+    if (!newName.trim()) {
+      setCompanyError("El nombre es obligatorio.");
+      return;
+    }
+    setSavingCompany(true);
+    setCompanyError(null);
+    const res = await fetch("/api/companies", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newName, industry: newIndustry, website: newWebsite, instagram: newInstagram }),
+    });
+    const json = await res.json();
+    if (!res.ok) {
+      setCompanyError(json.error ?? "Error al guardar la empresa.");
+      setSavingCompany(false);
+      return;
+    }
+    const added: CompanyOpt = json.company;
+    setCompanies((prev) => [...prev, added].sort((a, b) => a.name.localeCompare(b.name)));
+    setCompanyId(added.id);
+    setAddingCompany(false);
+    setNewName("");
+    setNewWebsite("");
+    setNewInstagram("");
+    setSavingCompany(false);
+  }
 
   const requiresPhone = type === "complaint" || type === "scam_report";
   const requiresEvidence =
@@ -61,6 +111,11 @@ export default function PostForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (addingCompany) {
+      setError("Terminá de agregar la empresa antes de publicar.");
+      return;
+    }
 
     if (requiresEvidence && evidenceUrls.length === 0) {
       setError("Necesitás adjuntar al menos una imagen como evidencia.");
@@ -132,17 +187,73 @@ export default function PostForm({
       </Field>
 
       <Field label="Empresa / página" hint={type === "experience" ? "Opcional para experiencias genéricas" : "Obligatorio"}>
-        <Select value={companyId} onChange={(e) => setCompanyId(e.target.value)} required={type !== "experience"}>
+        <Select
+          value={addingCompany ? NEW_COMPANY_SENTINEL : companyId}
+          onChange={(e) => handleCompanySelect(e.target.value)}
+          required={type !== "experience" && !addingCompany}
+        >
           <option value="">— Elegir —</option>
           {companies.map((c) => (
             <option key={c.id} value={c.id}>
               {c.name} ({INDUSTRIES.find((i) => i.value === c.industry)?.label})
             </option>
           ))}
+          <option value={NEW_COMPANY_SENTINEL}>+ Agregar nueva empresa…</option>
         </Select>
-        <p className="mt-1 text-xs text-zinc-500">
-          ¿No encontrás la empresa? Por ahora pedinos sumarla por mail.
-        </p>
+
+        {addingCompany && (
+          <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 space-y-3">
+            <p className="text-sm font-medium text-zinc-800">Nueva empresa</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-zinc-700">Nombre *</label>
+                <Input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder="Ej: Naranja X"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-zinc-700">Rubro *</label>
+                <Select value={newIndustry} onChange={(e) => setNewIndustry(e.target.value)}>
+                  {INDUSTRIES.map((i) => (
+                    <option key={i.value} value={i.value}>{i.label}</option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-zinc-700">Sitio web</label>
+                <Input
+                  value={newWebsite}
+                  onChange={(e) => setNewWebsite(e.target.value)}
+                  placeholder="https://empresa.com.ar"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-zinc-700">Instagram</label>
+                <Input
+                  value={newInstagram}
+                  onChange={(e) => setNewInstagram(e.target.value)}
+                  placeholder="@empresa"
+                />
+              </div>
+            </div>
+            {companyError && <p className="text-xs text-red-600">{companyError}</p>}
+            <div className="flex gap-2">
+              <Button type="button" size="sm" onClick={handleAddCompany} disabled={savingCompany}>
+                {savingCompany ? "Guardando…" : "Guardar empresa"}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => { setAddingCompany(false); setCompanyId(""); setCompanyError(null); }}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        )}
       </Field>
 
       {type === "experience" && (
