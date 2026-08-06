@@ -23,7 +23,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: post } = await supabase
+  const { data: post, error: postError } = await supabase
     .from("posts")
     .select(
       "id, user_id, company_id, type, title, body, evidence_urls, sentiment, status, upvotes, downvotes, created_at, profile:profiles(alias, trust_score), company:companies(name, slug, industry, is_legitimate)",
@@ -31,7 +31,10 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     .eq("id", id)
     .single();
 
-  if (!post) notFound();
+  if (postError || !post) {
+    console.error("[post/page] fetch error:", JSON.stringify(postError), "id:", id);
+    notFound();
+  }
   const typed = post as unknown as PostWithRelations;
 
   let currentVote: 1 | -1 | 0 = 0;
