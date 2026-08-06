@@ -9,7 +9,7 @@ export default async function DenunciasPage() {
   const { data } = await supabase
     .from("posts")
     .select(
-      "id, user_id, company_id, type, title, body, evidence_urls, sentiment, status, upvotes, downvotes, created_at, profile:profiles(alias, trust_score), company:companies(name, slug, industry, is_legitimate)",
+      "id, user_id, company_id, type, title, body, evidence_urls, sentiment, status, upvotes, downvotes, created_at, profile:profiles!posts_user_id_fkey(alias, trust_score), company:companies(name, slug, industry, is_legitimate)",
     )
     .eq("type", "scam_report")
     .eq("status", "published")

@@ -25,7 +25,7 @@ export default function CommentsSection({ postId, isLogged }: { postId: string; 
     const supabase = createClient();
     supabase
       .from("comments")
-      .select("id, body, created_at, profile:profiles(alias)")
+      .select("id, body, created_at, profile:profiles!comments_user_id_fkey(alias)")
       .eq("post_id", postId)
       .order("created_at", { ascending: true })
       .then(({ data }) => {
@@ -49,7 +49,7 @@ export default function CommentsSection({ postId, isLogged }: { postId: string; 
     const { data, error } = await supabase
       .from("comments")
       .insert({ post_id: postId, user_id: user.id, body })
-      .select("id, body, created_at, profile:profiles(alias)")
+      .select("id, body, created_at, profile:profiles!comments_user_id_fkey(alias)")
       .single();
     if (!error && data) {
       setComments((c) => [...c, data as unknown as CommentRow]);
