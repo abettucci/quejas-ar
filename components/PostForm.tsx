@@ -86,8 +86,9 @@ export default function PostForm({
         type,
         title,
         body,
-        sentiment: type === "experience" ? sentiment : type === "complaint" ? "negative" : "negative",
+        sentiment: type === "experience" ? sentiment : "negative",
         evidence_urls: evidenceUrls,
+        status: "published",
       })
       .select("id")
       .single();
