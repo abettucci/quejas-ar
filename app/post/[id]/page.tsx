@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { createClient } from "@/lib/supabase/server";
@@ -52,6 +53,13 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
+      <Link
+        href="/"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900"
+      >
+        <ArrowLeft size={16} />
+        Volver a posteos
+      </Link>
       <Card>
         <CardHeader>
           <div className="flex flex-wrap items-center gap-2">

@@ -56,6 +56,7 @@ export default function VoteButtons({
       setVote(value);
     }
     setPending(false);
+    router.refresh();
   }
 
   return (
