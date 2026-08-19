@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -19,7 +18,6 @@ export default function VoteButtons({
   currentVote: 1 | -1 | 0;
   isLogged: boolean;
 }) {
-  const router = useRouter();
   const [up, setUp] = useState(upvotes);
   const [down, setDown] = useState(downvotes);
   const [vote, setVote] = useState(currentVote);
@@ -56,7 +54,6 @@ export default function VoteButtons({
       setVote(value);
     }
     setPending(false);
-    router.refresh();
   }
 
   return (
