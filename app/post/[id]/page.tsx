@@ -55,9 +55,9 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     <div className="mx-auto max-w-3xl px-4 py-8">
       <Link
         href="/"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900"
+        className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-500 hover:border-zinc-300 hover:text-zinc-900 transition-colors"
       >
-        <ArrowLeft size={16} />
+        <ArrowLeft size={14} />
         Volver a posteos
       </Link>
       <Card>

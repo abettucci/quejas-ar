@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,7 @@ export default function VoteButtons({
   currentVote: 1 | -1 | 0;
   isLogged: boolean;
 }) {
+  const router = useRouter();
   const [up, setUp] = useState(upvotes);
   const [down, setDown] = useState(downvotes);
   const [vote, setVote] = useState(currentVote);
@@ -60,28 +62,28 @@ export default function VoteButtons({
     <div className="flex items-center gap-2 text-sm">
       <button
         onClick={() => cast(1)}
-        className={cn(
-          "inline-flex items-center gap-1 rounded-md border px-3 py-1.5 transition-colors",
-          vote === 1
-            ? "border-emerald-300 bg-emerald-50 text-emerald-900"
-            : "border-zinc-200 bg-white hover:bg-zinc-50",
-        )}
         disabled={pending}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all",
+          vote === 1
+            ? "border-emerald-300 bg-emerald-50 text-emerald-800 shadow-sm"
+            : "border-zinc-200 bg-white text-zinc-600 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700",
+        )}
       >
-        <ThumbsUp size={16} />
+        <ThumbsUp size={14} />
         <span>{up}</span>
       </button>
       <button
         onClick={() => cast(-1)}
-        className={cn(
-          "inline-flex items-center gap-1 rounded-md border px-3 py-1.5 transition-colors",
-          vote === -1
-            ? "border-red-300 bg-red-50 text-red-900"
-            : "border-zinc-200 bg-white hover:bg-zinc-50",
-        )}
         disabled={pending}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all",
+          vote === -1
+            ? "border-red-300 bg-red-50 text-red-800 shadow-sm"
+            : "border-zinc-200 bg-white text-zinc-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700",
+        )}
       >
-        <ThumbsDown size={16} />
+        <ThumbsDown size={14} />
         <span>{down}</span>
       </button>
     </div>

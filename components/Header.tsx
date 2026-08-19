@@ -18,25 +18,28 @@ export default async function Header() {
   }
 
   return (
-    <header className="border-b border-zinc-200 bg-white">
+    <header className="sticky top-0 z-50 border-b border-black/[0.06] bg-white/90 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-        <Link href="/" className="font-semibold tracking-tight">
-          quejas.ar
+        <Link href="/" className="flex items-center gap-2">
+          <span className="font-bold tracking-tight text-zinc-900">quejas.ar</span>
+          <span className="hidden sm:inline-block rounded-full bg-red-50 border border-red-100 px-2 py-0.5 text-[10px] font-medium text-red-600">
+            beta
+          </span>
         </Link>
-        <nav className="flex items-center gap-2">
-          <Link href="/denuncias" className="hidden text-sm text-zinc-700 hover:text-zinc-950 sm:block">
+        <nav className="flex items-center gap-3">
+          <Link href="/denuncias" className="hidden text-sm text-zinc-500 hover:text-zinc-900 transition-colors sm:block">
             Denuncias
           </Link>
           {user ? (
             <>
               <Link href="/nuevo">
-                <Button size="sm">Nuevo posteo</Button>
+                <Button size="sm">+ Nuevo posteo</Button>
               </Link>
-              <Link href="/perfil" className="text-sm text-zinc-700 hover:text-zinc-950">
+              <Link href="/perfil" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">
                 {profile?.alias ?? "perfil"}
               </Link>
               {profile?.is_moderator && (
-                <Link href="/admin" className="text-sm text-zinc-700 hover:text-zinc-950">
+                <Link href="/admin" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors">
                   Admin
                 </Link>
               )}

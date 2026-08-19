@@ -58,10 +58,15 @@ export default async function HomePage({
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <section className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Tu reclamo, tu experiencia, tu denuncia.
+        <div className="inline-flex items-center gap-1.5 text-xs font-medium text-red-600 bg-red-50 border border-red-100 rounded-full px-3 py-1 mb-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+          Plataforma independiente · Argentina
+        </div>
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-900">
+          Tu reclamo, tu experiencia,{" "}
+          <span className="text-red-500">tu denuncia.</span>
         </h1>
-        <p className="mt-2 max-w-2xl text-zinc-600">
+        <p className="mt-2 max-w-2xl text-zinc-500">
           Centralizamos reclamos contra empresas argentinas con mal servicio, trucos para
           conseguir mejor atención, y denuncias de páginas truchas. Sumá tu aporte y ayudá a que
           se conozca.
@@ -87,21 +92,24 @@ export default async function HomePage({
 
       {/* Ordenamiento */}
       <div className="mb-6 flex items-center gap-2 text-sm">
-        <span className="text-xs text-zinc-400">Ordenar:</span>
+        <span className="text-xs text-zinc-400 font-medium">Ordenar:</span>
         <FilterLink href={buildHref(params, { sort: undefined })} label="Recientes" active={sort === "recent"} />
         <FilterLink href={buildHref(params, { sort: "util" })} label="Más útiles" active={sort === "util"} />
         <FilterLink href={buildHref(params, { sort: "empresa" })} label="Empresa A–Z" active={sort === "empresa"} />
       </div>
 
       {posts.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-zinc-300 bg-white p-12 text-center text-zinc-500">
-          <p>Todavía no hay posteos.</p>
-          <Link href="/nuevo" className="mt-2 inline-block font-medium text-zinc-900 underline">
+        <div className="rounded-xl border border-dashed border-zinc-200 bg-white p-12 text-center">
+          <p className="text-zinc-500">Todavía no hay posteos en esta categoría.</p>
+          <Link
+            href="/nuevo"
+            className="mt-3 inline-block rounded-full border border-zinc-900 bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-zinc-800 transition-colors"
+          >
             Sé el primero en cargar uno
           </Link>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {posts.map((p) => (
             <PostCard key={p.id} post={p} />
           ))}
@@ -115,8 +123,10 @@ function FilterLink({ href, label, active }: { href: string; label: string; acti
   return (
     <Link
       href={href}
-      className={`rounded-full px-3 py-1 ${
-        active ? "bg-zinc-900 text-white" : "bg-white text-zinc-700 hover:bg-zinc-100"
+      className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+        active
+          ? "border-zinc-900 bg-zinc-900 text-white"
+          : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
       }`}
     >
       {label}
