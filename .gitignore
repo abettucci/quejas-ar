@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+# generated on corporate machines with an internal npm registry proxy —
+# resolved URLs are unreachable from Vercel's build environment
+/package-lock.json
 /.pnp
 .pnp.*
 .yarn/*
