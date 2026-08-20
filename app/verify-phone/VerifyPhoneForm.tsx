@@ -65,7 +65,7 @@ export default function VerifyPhoneForm() {
         </>
       ) : (
         <>
-          <p className="text-sm text-zinc-600">Te mandamos un código por SMS a {phone}.</p>
+          <p className="text-sm text-muted">Te mandamos un código por SMS a {phone}.</p>
           <Input
             type="text"
             inputMode="numeric"

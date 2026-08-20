@@ -62,18 +62,18 @@ export default function CommentsSection({ postId, isLogged }: { postId: string; 
     <section>
       <h2 className="mb-3 text-lg font-semibold">Comentarios ({comments.length})</h2>
       {loading ? (
-        <p className="text-sm text-zinc-500">Cargando…</p>
+        <p className="text-sm text-muted">Cargando…</p>
       ) : comments.length === 0 ? (
-        <p className="text-sm text-zinc-500">Aún no hay comentarios.</p>
+        <p className="text-sm text-muted">Aún no hay comentarios.</p>
       ) : (
         <ul className="space-y-3">
           {comments.map((c) => (
-            <li key={c.id} className="rounded-md border border-zinc-200 bg-white p-3">
-              <div className="mb-1 flex items-center justify-between text-xs text-zinc-500">
+            <li key={c.id} className="rounded-md border border-border bg-surface p-3">
+              <div className="mb-1 flex items-center justify-between text-xs text-muted">
                 <span>{c.profile?.alias ?? "anónimo"}</span>
                 <span>{formatDistanceToNow(new Date(c.created_at), { addSuffix: true, locale: es })}</span>
               </div>
-              <p className="whitespace-pre-wrap text-sm text-zinc-800">{c.body}</p>
+              <p className="whitespace-pre-wrap text-sm text-foreground/90">{c.body}</p>
             </li>
           ))}
         </ul>
@@ -93,8 +93,8 @@ export default function CommentsSection({ postId, isLogged }: { postId: string; 
             </Button>
           </form>
         ) : (
-          <p className="text-sm text-zinc-500">
-            <Link href={`/login?redirect=/post/${postId}`} className="font-medium text-zinc-900 underline">
+          <p className="text-sm text-muted">
+            <Link href={`/login?redirect=/post/${postId}`} className="font-medium text-foreground underline">
               Ingresá
             </Link>{" "}
             para comentar.

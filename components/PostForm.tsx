@@ -173,12 +173,12 @@ export default function PostForm({
               onClick={() => setType(t.value)}
               className={`rounded-md border p-3 text-left text-sm transition-colors ${
                 type === t.value
-                  ? "border-zinc-900 bg-zinc-900 text-white"
-                  : "border-zinc-200 bg-white hover:border-zinc-400"
+                  ? "border-accent bg-accent text-white"
+                  : "border-border bg-surface hover:border-accent/40"
               }`}
             >
               <div className="font-medium">{t.label}</div>
-              <div className={`mt-1 text-xs ${type === t.value ? "text-zinc-200" : "text-zinc-500"}`}>
+              <div className={`mt-1 text-xs ${type === t.value ? "text-white/80" : "text-muted"}`}>
                 {t.description}
               </div>
             </button>
@@ -202,11 +202,11 @@ export default function PostForm({
         </Select>
 
         {addingCompany && (
-          <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 space-y-3">
-            <p className="text-sm font-medium text-zinc-800">Nueva empresa</p>
+          <div className="mt-3 rounded-lg border border-border bg-background p-4 space-y-3">
+            <p className="text-sm font-medium text-foreground/90">Nueva empresa</p>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="mb-1 block text-xs font-medium text-zinc-700">Nombre *</label>
+                <label className="mb-1 block text-xs font-medium text-foreground/80">Nombre *</label>
                 <Input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
@@ -214,7 +214,7 @@ export default function PostForm({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-zinc-700">Rubro *</label>
+                <label className="mb-1 block text-xs font-medium text-foreground/80">Rubro *</label>
                 <Select value={newIndustry} onChange={(e) => setNewIndustry(e.target.value)}>
                   {INDUSTRIES.map((i) => (
                     <option key={i.value} value={i.value}>{i.label}</option>
@@ -222,7 +222,7 @@ export default function PostForm({
                 </Select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-zinc-700">Sitio web</label>
+                <label className="mb-1 block text-xs font-medium text-foreground/80">Sitio web</label>
                 <Input
                   value={newWebsite}
                   onChange={(e) => setNewWebsite(e.target.value)}
@@ -230,7 +230,7 @@ export default function PostForm({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-zinc-700">Instagram</label>
+                <label className="mb-1 block text-xs font-medium text-foreground/80">Instagram</label>
                 <Input
                   value={newInstagram}
                   onChange={(e) => setNewInstagram(e.target.value)}
@@ -307,7 +307,7 @@ export default function PostForm({
         <Button type="submit" disabled={submitting} size="lg">
           {submitting ? "Publicando…" : "Publicar"}
         </Button>
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-muted">
           Tu posteo puede quedar en moderación si sos cuenta nueva o si nombrás una empresa.
         </p>
       </div>
@@ -326,9 +326,9 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium text-zinc-900">{label}</label>
+      <label className="mb-1.5 block text-sm font-medium text-foreground">{label}</label>
       {children}
-      {hint && <p className="mt-1 text-xs text-zinc-500">{hint}</p>}
+      {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
     </div>
   );
 }

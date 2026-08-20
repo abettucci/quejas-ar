@@ -5,9 +5,11 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
   return (
     <div
       className={cn(
-        "rounded-xl border border-black/[0.06] bg-white transition-shadow duration-200",
-        "shadow-[0px_1px_2px_-1px_rgba(0,0,0,0.06),0px_2px_4px_-2px_rgba(0,0,0,0.04)]",
-        "hover:shadow-[0px_2px_4px_-1px_rgba(0,0,0,0.10),0px_8px_16px_-4px_rgba(0,0,0,0.07)]",
+        "rounded-xl border border-border bg-surface transition-shadow duration-200",
+        "shadow-[0px_1px_2px_rgba(31,26,21,0.04),0px_1px_1px_rgba(31,26,21,0.03)]",
+        "dark:shadow-none",
+        "hover:shadow-[0px_8px_24px_-8px_rgba(31,26,21,0.14)]",
+        "dark:hover:shadow-[0px_8px_24px_-8px_rgba(0,0,0,0.5)]",
         className
       )}
       {...props}

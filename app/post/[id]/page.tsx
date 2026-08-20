@@ -55,7 +55,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     <div className="mx-auto max-w-3xl px-4 py-8">
       <Link
         href="/"
-        className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-500 hover:border-zinc-300 hover:text-zinc-900 transition-colors"
+        className="mb-6 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-sm text-muted hover:border-accent/30 hover:text-foreground transition-colors"
       >
         <ArrowLeft size={14} />
         Volver a posteos
@@ -67,7 +67,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             {typed.company && (
               <Link
                 href={`/empresa/${typed.company.slug}`}
-                className="text-sm font-medium text-zinc-700 hover:underline"
+                className="text-sm font-medium text-foreground/80 hover:text-accent hover:underline"
               >
                 {typed.company.name}
               </Link>
@@ -75,19 +75,19 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             {typed.status !== "published" && (
               <Badge variant="pending">{typed.status.replace("_", " ")}</Badge>
             )}
-            <span className="ml-auto text-xs text-zinc-500">
+            <span className="ml-auto text-xs text-muted">
               {formatDistanceToNow(new Date(typed.created_at), { addSuffix: true, locale: es })}
             </span>
           </div>
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight">{typed.title}</h1>
-          <p className="text-xs text-zinc-500">por {typed.profile?.alias ?? "anónimo"}</p>
+          <h1 className="font-display mt-2 text-2xl font-semibold tracking-tight text-foreground">{typed.title}</h1>
+          <p className="text-xs text-muted">por {typed.profile?.alias ?? "anónimo"}</p>
         </CardHeader>
         <CardContent>
-          <div className="whitespace-pre-wrap text-zinc-800">{typed.body}</div>
+          <div className="whitespace-pre-wrap text-foreground/90">{typed.body}</div>
 
           {typed.evidence_urls.length > 0 && (
             <div className="mt-6">
-              <h3 className="mb-2 text-sm font-medium text-zinc-700">Evidencia</h3>
+              <h3 className="mb-2 text-sm font-medium text-foreground/80">Evidencia</h3>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {typed.evidence_urls.map((url) => (
                   <a
@@ -95,7 +95,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                     href={url}
                     target="_blank"
                     rel="noreferrer"
-                    className="relative block aspect-square overflow-hidden rounded-md border border-zinc-200"
+                    className="relative block aspect-square overflow-hidden rounded-md border border-border"
                   >
                     <Image src={url} alt="evidencia" fill className="object-cover" />
                   </a>
@@ -104,7 +104,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             </div>
           )}
 
-          <div className="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4">
+          <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
             <VoteButtons
               postId={typed.id}
               upvotes={typed.upvotes}

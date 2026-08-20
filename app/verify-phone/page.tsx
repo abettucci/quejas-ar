@@ -20,7 +20,7 @@ export default async function VerifyPhonePage() {
   return (
     <div className="mx-auto max-w-md px-4 py-16">
       <h1 className="text-2xl font-semibold tracking-tight">Verificá tu teléfono</h1>
-      <p className="mt-2 text-sm text-zinc-600">
+      <p className="mt-2 text-sm text-muted">
         Para postear reclamos o denuncias necesitamos validar tu número (1 cuenta = 1 número). Esto
         nos ayuda a evitar bots y posteos coordinados de empleados de empresas.
       </p>

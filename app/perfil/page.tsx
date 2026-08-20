@@ -31,7 +31,7 @@ export default async function ProfilePage() {
       <Card>
         <CardHeader>
           <h1 className="text-xl font-semibold tracking-tight">{profile?.alias}</h1>
-          <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-600">
+          <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
             <span>Trust score: {profile?.trust_score}</span>
             <span>·</span>
             <span>Puntos: {totalPoints}</span>
@@ -42,7 +42,7 @@ export default async function ProfilePage() {
           {!profile?.phone_verified && (
             <Link
               href="/verify-phone"
-              className="mt-2 text-sm font-medium text-zinc-900 underline"
+              className="mt-2 text-sm font-medium text-foreground underline"
             >
               Verificar teléfono →
             </Link>
@@ -52,14 +52,14 @@ export default async function ProfilePage() {
 
       <h2 className="mt-8 mb-3 text-lg font-semibold">Tus posteos</h2>
       {!posts || posts.length === 0 ? (
-        <p className="text-sm text-zinc-500">Todavía no posteaste nada.</p>
+        <p className="text-sm text-muted">Todavía no posteaste nada.</p>
       ) : (
         <ul className="space-y-2">
           {posts.map((p) => (
             <li key={p.id}>
               <Link
                 href={`/post/${p.id}`}
-                className="flex items-center justify-between rounded-md border border-zinc-200 bg-white p-3 text-sm hover:bg-zinc-50"
+                className="flex items-center justify-between rounded-md border border-border bg-surface p-3 text-sm hover:bg-background"
               >
                 <span className="flex-1 truncate font-medium">{p.title}</span>
                 <Badge
@@ -77,7 +77,7 @@ export default async function ProfilePage() {
                     ? "en moderación"
                     : "rechazado"}
                 </Badge>
-                <span className="ml-3 hidden text-xs text-zinc-500 sm:inline">
+                <span className="ml-3 hidden text-xs text-muted sm:inline">
                   {formatDistanceToNow(new Date(p.created_at), { addSuffix: true, locale: es })}
                 </span>
               </Link>

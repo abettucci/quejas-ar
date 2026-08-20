@@ -33,7 +33,6 @@ export default function VoteButtons({
 
     const isRemove = vote === value;
 
-    // Optimistic update
     if (isRemove) {
       if (value === 1) setUp((n) => n - 1);
       else setDown((n) => n - 1);
@@ -59,8 +58,8 @@ export default function VoteButtons({
         className={cn(
           "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all",
           vote === 1
-            ? "border-emerald-300 bg-emerald-50 text-emerald-800 shadow-sm"
-            : "border-zinc-200 bg-white text-zinc-600 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700",
+            ? "border-success/30 bg-success-soft text-success shadow-sm"
+            : "border-border bg-surface text-muted hover:border-success/20 hover:bg-success-soft hover:text-success",
         )}
       >
         <ThumbsUp size={14} />
@@ -72,8 +71,8 @@ export default function VoteButtons({
         className={cn(
           "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-all",
           vote === -1
-            ? "border-red-300 bg-red-50 text-red-800 shadow-sm"
-            : "border-zinc-200 bg-white text-zinc-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700",
+            ? "border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400 shadow-sm"
+            : "border-border bg-surface text-muted hover:border-red-500/20 hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-400",
         )}
       >
         <ThumbsDown size={14} />

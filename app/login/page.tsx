@@ -17,7 +17,7 @@ export default async function LoginPage({
   return (
     <div className="mx-auto max-w-md px-4 py-16">
       <h1 className="text-2xl font-semibold tracking-tight">Ingresar a quejas.ar</h1>
-      <p className="mt-2 text-sm text-zinc-600">
+      <p className="mt-2 text-sm text-muted">
         Usamos Google para validar tu identidad. Si vas a postear reclamos o denuncias, después te
         pediremos verificar tu teléfono.
       </p>

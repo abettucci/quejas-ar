@@ -41,13 +41,13 @@ export default async function AdminPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <h1 className="text-2xl font-semibold tracking-tight">Cola de moderación</h1>
-      <p className="mt-1 text-sm text-zinc-600">
+      <p className="mt-1 text-sm text-muted">
         Posts pendientes ({posts.length}). Aprobá los legítimos, rechazá spam o sin evidencia.
       </p>
 
       <div className="mt-6 space-y-4">
         {posts.length === 0 ? (
-          <p className="text-sm text-zinc-500">No hay posts pendientes.</p>
+          <p className="text-sm text-muted">No hay posts pendientes.</p>
         ) : (
           posts.map((p) => (
             <Card key={p.id}>
@@ -56,8 +56,8 @@ export default async function AdminPage() {
                   <Badge variant={p.type === "scam_report" ? "scam" : p.type === "complaint" ? "complaint" : "experience"}>
                     {p.type}
                   </Badge>
-                  {p.company && <span className="text-sm text-zinc-700">{p.company.name}</span>}
-                  <span className="ml-auto text-xs text-zinc-500">
+                  {p.company && <span className="text-sm text-foreground/80">{p.company.name}</span>}
+                  <span className="ml-auto text-xs text-muted">
                     por {p.profile?.alias} · trust {p.profile?.trust_score} ·{" "}
                     {formatDistanceToNow(new Date(p.created_at), { addSuffix: true, locale: es })}
                   </span>
@@ -65,7 +65,7 @@ export default async function AdminPage() {
                 <h3 className="mt-1 text-lg font-semibold">{p.title}</h3>
               </CardHeader>
               <CardContent>
-                <p className="whitespace-pre-wrap text-sm text-zinc-700">{p.body}</p>
+                <p className="whitespace-pre-wrap text-sm text-foreground/80">{p.body}</p>
                 {p.evidence_urls.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {p.evidence_urls.map((url) => (
@@ -74,7 +74,7 @@ export default async function AdminPage() {
                         href={url}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs text-zinc-600 underline"
+                        className="text-xs text-muted underline"
                       >
                         Ver evidencia
                       </a>
@@ -93,11 +93,11 @@ export default async function AdminPage() {
           <h2 className="mb-3 text-lg font-semibold">Posts flagged por heurísticas</h2>
           <ul className="space-y-2 text-sm">
             {flagsData.map((f, i) => (
-              <li key={i} className="rounded-md border border-zinc-200 bg-white p-3">
+              <li key={i} className="rounded-md border border-border bg-surface p-3">
                 <p>
                   Post <code className="text-xs">{f.post_id}</code>
                 </p>
-                <p className="text-xs text-zinc-600">
+                <p className="text-xs text-muted">
                   {f.reason} {f.system_reason && `(${f.system_reason})`}
                 </p>
               </li>

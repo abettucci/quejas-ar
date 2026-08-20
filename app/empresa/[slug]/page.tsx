@@ -34,7 +34,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
-      <header className="mb-8 rounded-lg border border-zinc-200 bg-white p-6">
+      <header className="mb-8 rounded-lg border border-border bg-surface p-6">
         <div className="flex items-start justify-between gap-3">
           <div>
             <Badge variant="default">{industryLabel}</Badge>
@@ -49,16 +49,16 @@ export default async function CompanyPage({ params }: { params: Promise<{ slug: 
                 href={company.website}
                 target="_blank"
                 rel="noreferrer"
-                className="text-sm text-zinc-500 hover:underline"
+                className="text-sm text-muted hover:underline"
               >
                 {company.website}
               </a>
             )}
             {company.instagram && (
-              <p className="text-sm text-zinc-500">@{company.instagram}</p>
+              <p className="text-sm text-muted">@{company.instagram}</p>
             )}
           </div>
-          <div className="text-right text-sm text-zinc-600">
+          <div className="text-right text-sm text-muted">
             <p>{counts.complaints} reclamos</p>
             <p>{counts.experiences} experiencias</p>
             <p>{counts.scams} denuncias trucho</p>
@@ -67,7 +67,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ slug: 
       </header>
 
       {posts.length === 0 ? (
-        <p className="text-sm text-zinc-500">Sin posteos publicados todavía.</p>
+        <p className="text-sm text-muted">Sin posteos publicados todavía.</p>
       ) : (
         <div className="space-y-4">
           {posts.map((p) => (

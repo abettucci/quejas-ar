@@ -65,12 +65,12 @@ export default function EvidenceUploader({
       {value.length > 0 && (
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
           {value.map((url) => (
-            <div key={url} className="relative aspect-square overflow-hidden rounded-md border border-zinc-200">
+            <div key={url} className="relative aspect-square overflow-hidden rounded-md border border-border">
               <Image src={url} alt="evidencia" fill className="object-cover" />
               <button
                 type="button"
                 onClick={() => remove(url)}
-                className="absolute top-1 right-1 rounded-full bg-zinc-900/80 p-1 text-white hover:bg-zinc-900"
+                className="absolute top-1 right-1 rounded-full bg-black/70 p-1 text-white hover:bg-black/90"
                 aria-label="Eliminar"
               >
                 <X size={14} />
@@ -81,7 +81,7 @@ export default function EvidenceUploader({
       )}
       {value.length < max && (
         <label
-          className={`inline-flex h-10 cursor-pointer items-center rounded-md border border-zinc-200 bg-white px-4 text-sm font-medium hover:bg-zinc-100 ${
+          className={`inline-flex h-10 cursor-pointer items-center rounded-md border border-border bg-surface px-4 text-sm font-medium hover:bg-surface-hover ${
             uploading ? "pointer-events-none opacity-50" : ""
           }`}
         >

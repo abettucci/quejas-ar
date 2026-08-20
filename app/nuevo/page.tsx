@@ -17,7 +17,7 @@ export default async function NewPostPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <h1 className="text-2xl font-semibold tracking-tight">Nuevo posteo</h1>
-      <p className="mt-2 text-sm text-zinc-600">
+      <p className="mt-2 text-sm text-muted">
         Antes de publicar leé las reglas: los reclamos y denuncias requieren evidencia. Las
         experiencias positivas con empresas específicas también — para evitar que empleados
         inflen reseñas.
