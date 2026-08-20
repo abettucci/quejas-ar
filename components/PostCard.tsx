@@ -28,10 +28,10 @@ export default function PostCard({ post }: { post: PostWithRelations }) {
         "dark:hover:shadow-[0px_8px_24px_-8px_rgba(0,0,0,0.5)]",
       )}
     >
-      <Link href={`/post/${post.id}`} className="absolute inset-0 z-0" aria-label={post.title} />
+      <Link href={`/post/${post.id}`} className="absolute inset-0 z-10" aria-label={post.title} />
 
       {/* Vote rail */}
-      <div className="relative z-10 flex w-14 shrink-0 flex-col items-center justify-center gap-0.5 border-r border-border bg-surface-hover/40 py-3">
+      <div className="flex w-14 shrink-0 flex-col items-center justify-center gap-0.5 border-r border-border bg-surface-hover/40 py-3">
         <ChevronUp
           size={16}
           className={cn(
@@ -47,7 +47,7 @@ export default function PostCard({ post }: { post: PostWithRelations }) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 min-w-0 flex-1 px-4 py-3.5">
+      <div className="min-w-0 flex-1 px-4 py-3.5">
         <div className="mb-1.5 flex items-center gap-2 flex-wrap">
           <Badge variant={meta.variant}>{meta.label}</Badge>
           {post.company && (

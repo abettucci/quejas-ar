@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import PostCard from "@/components/PostCard";
@@ -23,6 +24,78 @@ export default async function HomePage({
   searchParams: Promise<Params>;
 }) {
   const params = await searchParams;
+  const sort = params.sort ?? "recent";
+
+  return (
+    <div>
+      {/* Hero — static, never re-suspends on filter change */}
+      <section className="bg-grain relative overflow-hidden border-b border-border">
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_70%_50%_at_15%_0%,color-mix(in_oklab,var(--accent)_12%,transparent)_0%,transparent_65%)]" />
+        <div className="relative z-[1] mx-auto max-w-5xl px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
+          <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent-soft px-3 py-1 text-xs font-medium text-accent">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+            Plataforma independiente · Argentina
+          </div>
+          <h1 className="font-display max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
+            Tu reclamo,{" "}
+            <span className="italic font-medium text-accent">tu voz</span>{" "}
+            frente a las empresas.
+          </h1>
+          <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted">
+            Centralizamos reclamos contra empresas argentinas, trucos para
+            conseguir mejor atención, y denuncias de páginas truchas.
+          </p>
+          <Link
+            href="/nuevo"
+            className="mt-7 inline-flex w-fit items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-[0px_4px_14px_-4px_color-mix(in_oklab,var(--accent)_60%,transparent)] transition-all hover:bg-accent-hover hover:shadow-[0px_6px_18px_-4px_color-mix(in_oklab,var(--accent)_70%,transparent)] active:scale-[0.98]"
+          >
+            Publicar un reclamo →
+          </Link>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-5xl px-4">
+        {/* Filter bar — sticky below header, never re-suspends */}
+        <div className="sticky top-16 z-40 -mx-4 border-b border-border bg-background/90 backdrop-blur-sm px-4 py-3">
+          <div className="overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex items-center gap-1.5 whitespace-nowrap">
+              <FilterLink href={buildHref(params, { type: undefined, industry: undefined })} label="Todo" active={!params.type && !params.industry} />
+              <FilterLink href={buildHref(params, { type: "complaint", industry: undefined })} label="Reclamos" active={params.type === "complaint"} />
+              <FilterLink href={buildHref(params, { type: "experience", industry: undefined })} label="Experiencias" active={params.type === "experience"} />
+              <FilterLink href={buildHref(params, { type: "scam_report", industry: undefined })} label="Denuncias trucho" active={params.type === "scam_report"} />
+              <span className="mx-1 text-border">|</span>
+              {INDUSTRIES.map((i) => (
+                <FilterLink
+                  key={i.value}
+                  href={buildHref(params, { industry: i.value, type: undefined })}
+                  label={i.label}
+                  active={params.industry === i.value}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Sort row — static, reads current params only (no data dependency) */}
+        <div className="mb-4 mt-5 flex items-center justify-end gap-1.5">
+          <span className="text-xs text-muted">Ordenar:</span>
+          <SortLink href={buildHref(params, { sort: undefined })} label="Recientes" active={sort === "recent"} />
+          <SortLink href={buildHref(params, { sort: "util" })} label="Más útiles" active={sort === "util"} />
+          <SortLink href={buildHref(params, { sort: "empresa" })} label="Empresa A–Z" active={sort === "empresa"} />
+        </div>
+
+        {/* Only this part re-suspends when filters/sort change */}
+        <div className="pb-8">
+          <Suspense key={JSON.stringify(params)} fallback={<PostFeedSkeleton />}>
+            <PostFeed params={params} />
+          </Suspense>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+async function PostFeed({ params }: { params: Params }) {
   const supabase = await createClient();
   const sort = params.sort ?? "recent";
 
@@ -55,90 +128,49 @@ export default async function HomePage({
     );
   }
 
-  const totalPosts = posts.length;
+  if (posts.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-surface p-12 text-center">
+        <p className="text-muted">No hay posteos en esta categoría.</p>
+        <Link
+          href="/nuevo"
+          className="mt-3 inline-block rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
+        >
+          Sé el primero en cargar uno
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div>
-      {/* Hero */}
-      <section className="bg-grain relative overflow-hidden border-b border-border">
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_70%_50%_at_15%_0%,color-mix(in_oklab,var(--accent)_12%,transparent)_0%,transparent_65%)]" />
-        <div className="relative z-[1] mx-auto max-w-5xl px-4 pt-14 pb-10 sm:pt-20 sm:pb-14">
-          <div className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent-soft px-3 py-1 text-xs font-medium text-accent">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
-            Plataforma independiente · Argentina
-          </div>
-          <h1 className="font-display max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
-            Tu reclamo,{" "}
-            <span className="italic font-medium text-accent">tu voz</span>{" "}
-            frente a las empresas.
-          </h1>
-          <p className="mt-4 max-w-md text-[15px] leading-relaxed text-muted">
-            Centralizamos reclamos contra empresas argentinas, trucos para
-            conseguir mejor atención, y denuncias de páginas truchas.
-          </p>
-          <Link
-            href="/nuevo"
-            className="mt-7 inline-flex w-fit items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-[0px_4px_14px_-4px_color-mix(in_oklab,var(--accent)_60%,transparent)] transition-all hover:bg-accent-hover hover:shadow-[0px_6px_18px_-4px_color-mix(in_oklab,var(--accent)_70%,transparent)] active:scale-[0.98]"
-          >
-            Publicar un reclamo →
-          </Link>
-        </div>
-      </section>
+      <p className="font-mono mb-3 text-xs text-muted">
+        {posts.length} posteo{posts.length !== 1 ? "s" : ""}
+      </p>
+      <div className="space-y-2.5">
+        {posts.map((p) => (
+          <PostCard key={p.id} post={p} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-      <div className="mx-auto max-w-5xl px-4">
-        {/* Filter bar — sticky below header */}
-        <div className="sticky top-16 z-40 -mx-4 border-b border-border bg-background/90 backdrop-blur-sm px-4 py-3">
-          <div className="overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex items-center gap-1.5 whitespace-nowrap">
-              <FilterLink href={buildHref(params, { type: undefined, industry: undefined })} label="Todo" active={!params.type && !params.industry} />
-              <FilterLink href={buildHref(params, { type: "complaint", industry: undefined })} label="Reclamos" active={params.type === "complaint"} />
-              <FilterLink href={buildHref(params, { type: "experience", industry: undefined })} label="Experiencias" active={params.type === "experience"} />
-              <FilterLink href={buildHref(params, { type: "scam_report", industry: undefined })} label="Denuncias trucho" active={params.type === "scam_report"} />
-              <span className="mx-1 text-border">|</span>
-              {INDUSTRIES.map((i) => (
-                <FilterLink
-                  key={i.value}
-                  href={buildHref(params, { industry: i.value, type: undefined })}
-                  label={i.label}
-                  active={params.industry === i.value}
-                />
-              ))}
+function PostFeedSkeleton() {
+  return (
+    <div>
+      <div className="mb-3 h-4 w-16 rounded bg-surface-hover animate-pulse" />
+      <div className="space-y-2.5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex overflow-hidden rounded-xl border border-border bg-surface">
+            <div className="w-14 shrink-0 border-r border-border bg-surface-hover/40" />
+            <div className="flex-1 px-4 py-3.5">
+              <div className="mb-2 h-4 w-24 rounded-full bg-surface-hover animate-pulse" />
+              <div className="mb-1.5 h-4 w-3/4 rounded bg-surface-hover animate-pulse" />
+              <div className="h-3.5 w-full rounded bg-surface-hover animate-pulse" />
             </div>
           </div>
-        </div>
-
-        <div className="py-5">
-          {/* Sort + count row */}
-          <div className="mb-4 flex items-center justify-between gap-2">
-            <p className="font-mono text-xs text-muted">
-              {totalPosts} posteo{totalPosts !== 1 ? "s" : ""}
-            </p>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs text-muted">Ordenar:</span>
-              <SortLink href={buildHref(params, { sort: undefined })} label="Recientes" active={sort === "recent"} />
-              <SortLink href={buildHref(params, { sort: "util" })} label="Más útiles" active={sort === "util"} />
-              <SortLink href={buildHref(params, { sort: "empresa" })} label="Empresa A–Z" active={sort === "empresa"} />
-            </div>
-          </div>
-
-          {posts.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-border bg-surface p-12 text-center">
-              <p className="text-muted">No hay posteos en esta categoría.</p>
-              <Link
-                href="/nuevo"
-                className="mt-3 inline-block rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-white hover:bg-accent-hover transition-colors"
-              >
-                Sé el primero en cargar uno
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-2.5">
-              {posts.map((p) => (
-                <PostCard key={p.id} post={p} />
-              ))}
-            </div>
-          )}
-        </div>
+        ))}
       </div>
     </div>
   );
