@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import PostCard from "@/components/PostCard";
+import { TransitionLink } from "@/components/TransitionLink";
 import { INDUSTRIES } from "@/lib/constants";
 import type { PostWithRelations } from "@/lib/types";
 
@@ -84,9 +85,13 @@ export default async function HomePage({
           <SortLink href={buildHref(params, { sort: "empresa" })} label="Empresa A–Z" active={sort === "empresa"} />
         </div>
 
-        {/* Only this part re-suspends when filters/sort change */}
+        {/* Only this part re-suspends when filters/sort change. No `key` here on
+            purpose — TransitionLink drives navigation inside a React transition,
+            so on filter/sort clicks React keeps this last-good render on screen
+            instead of unmounting to the fallback below (which still covers cold
+            loads / direct URL visits). */}
         <div className="pb-8">
-          <Suspense key={JSON.stringify(params)} fallback={<PostFeedSkeleton />}>
+          <Suspense fallback={<PostFeedSkeleton />}>
             <PostFeed params={params} />
           </Suspense>
         </div>
@@ -178,8 +183,9 @@ function PostFeedSkeleton() {
 
 function FilterLink({ href, label, active }: { href: string; label: string; active: boolean }) {
   return (
-    <Link
+    <TransitionLink
       href={href}
+      pendingClassName="opacity-60"
       className={`rounded-full border px-3 py-1 text-sm transition-colors ${
         active
           ? "border-accent bg-accent text-white"
@@ -187,14 +193,15 @@ function FilterLink({ href, label, active }: { href: string; label: string; acti
       }`}
     >
       {label}
-    </Link>
+    </TransitionLink>
   );
 }
 
 function SortLink({ href, label, active }: { href: string; label: string; active: boolean }) {
   return (
-    <Link
+    <TransitionLink
       href={href}
+      pendingClassName="opacity-60"
       className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
         active
           ? "bg-surface-hover text-foreground"
@@ -202,6 +209,6 @@ function SortLink({ href, label, active }: { href: string; label: string; active
       }`}
     >
       {label}
-    </Link>
+    </TransitionLink>
   );
 }
